@@ -1,0 +1,70 @@
+Sub StockMarket():
+
+'Variable for worksheet
+Dim ws As Worksheet
+
+' Loop through each worksheet in the workbook
+For Each ws In Sheets
+
+    ' Declaration for an initial variable to hold the unique ticker name
+    Dim Ticker_Group As String
+    Ticker_Group = 0
+
+    ' Declaration for an initial variable to hold the total sum of volume
+    Dim Volume_Total As Double
+    Volume_Total = 0
+
+    ' Keep track of the location for ticker in the summary table
+    Dim Summary_Table_Row As Integer
+    Summary_Table_Row = 2
+
+    ' Declaration of variable for counter and loops
+    Dim i As Long
+    Dim LastRow As Long
+    
+    ' Will count to the last row
+    LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+
+    ' Assign cells to hold strings for ticker & volume
+    ws.Range("I1").Value = "Ticker"
+    ws.Range("J1").Value = "Total Stock Volume"
+
+    ' Loop through all tickers
+    For i = 2 To LastRow
+
+        ' Check to see if variable is within ticker        
+	If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+      
+            ' Set the ticker
+            Ticker_Group = ws.Cells(i, 1).Value
+
+            ' Add to the Volume Total
+            Volume_Total = Volume_Total + ws.Cells(i, 7).Value
+
+            ' Print the ticker in the Summary Table
+            ws.Range("I" & Summary_Table_Row).Value = Ticker_Group
+
+            ' Print the volume total to the Summary Table
+            ws.Range("J" & Summary_Table_Row).Value = Volume_Total
+      
+            ' Add one to the summary table row
+            Summary_Table_Row = Summary_Table_Row + 1
+      
+            ' Reset the Volume Total
+            Volume_Total = 0
+
+            ' If the cell immediately following a row is the same ticker then 
+        Else
+    
+            ' Add to the Brand Total
+        Volume_Total = Volume_Total + ws.Cells(i, 7).Value
+        End If
+        
+  ' Proceed to next ticker and grab totals
+    Next i
+    
+' Proceed to next worksheet in workbook
+Next ws
+
+End Sub
+
